@@ -46,7 +46,7 @@ function gameLoop() {
 
     config.step = 0;
 
-    context.clearRect(0,0, canvas.width, canvas.heigth);
+    context.clearRect(0,0, canvas.width, canvas.height);
     
     drawSnake();
     drawBerry();
@@ -72,7 +72,7 @@ function drawSnake() {
     snake.x += snake.dx;
     snake.y += snake.dy;
 
-    snake.tails.unshift( {x: snake.x, y: snake.y});
+    snake.tails.unshift( {x: snake.x, y: snake.y} );
 
     if( snake.tails.length > snake.maxTalls){
         snake.tails.pop();
@@ -89,17 +89,19 @@ function drawSnake() {
         
         if (el.x === berry.x && el.y === berry.y) {
             snake.maxTails++;
+
+            if(score === 10) { 
+                config.maxStep =7;
+            } else if (score === 20) {
+                config.maxStep = 6;
+            } else if(score === 30) {
+                 config.maxStep = 5; 
+            } else if (score === 50) {
+               config.maxStep = 4
+            }
         }
         
-        if(score === 10) { 
-            config.maxStep =7;
-        } else if (score === 20) {
-            config.maxStep = 6;
-        } else if(score === 30) {
-             config.maxStep = 5; 
-        } else if (score === 50) {
-           config.maxStep = 4
-        }
+        
         
         for ( let i = index +1; i < snake.tails.length;i++) {
             if ( el.x == snake.tails[i].x && el.y == snake.tails[i].y) {
@@ -125,7 +127,21 @@ function randompositionBerry()  {
     berry.x = getRandomInt( 0, canvas.width/ config.sizeCell ) * config.sizeCell;
     berry.y = getRandomInt( 0, canvas.heigth/ config.sizeCell ) * config.sizeCell;
 }
-
-
+document.addEventListener("keydown", function (e) {
+    if  ( e.code == "KeyW"  ) {
+        snake.dy = -config.sizeCell;
+        snake.dx = 0;
+       }else if ( e.code == "KeyA"  ){
+        snake.dx = -config.sizeCell;
+        snake.dy = 0;
+       }else if ( e.code == "KeyS"  ){
+        snake.dx = -config.sizeCell;
+        snake.dy = 0;
+       }else if ( e.code == "KeyD"  ){
+        snake.dx = -config.sizeCell;
+        snake.dy = 0;
+    }
+})
+     
 
 
