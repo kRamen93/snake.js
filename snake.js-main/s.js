@@ -2,7 +2,7 @@ let score = 0;
 
 let config = {
     step: 0,
-    maxStep: 8,
+    maxStep: 10,
 
     sizeCell: 16,
     sizeBerry: 16 / 4,
@@ -33,7 +33,7 @@ const context = canvas.getContext('2d');
 const scoreBlock = document.querySelector('.game-score .score-count')
 
 drawScore();
-// randompositionBerry();
+randomPositionBerry();
 
 
 function gameLoop() {
@@ -71,6 +71,8 @@ function getRandomInt(min,max) {
 function drawSnake() {
     snake.x += snake.dx;
     snake.y += snake.dy;
+    
+    collisionBorder()
 
     snake.tails.unshift( {x: snake.x, y: snake.y} );
 
@@ -89,7 +91,8 @@ function drawSnake() {
         
         if (el.x === berry.x && el.y === berry.y) {
             snake.maxTails++;
-
+            incScore();
+            randomPositionBerry(); 
             if(score === 10) { 
                 config.maxStep =7;
             } else if (score === 20) {
@@ -123,10 +126,11 @@ function drawBerry() {
     context.fill();
 }
 
-function randompositionBerry()  {
+function randomPositionBerry()  {
     berry.x = getRandomInt( 0, canvas.width/ config.sizeCell ) * config.sizeCell;
     berry.y = getRandomInt( 0, canvas.heigth/ config.sizeCell ) * config.sizeCell;
 }
+
 document.addEventListener("keydown", function (e) {
     if  ( e.code == "KeyW"  ) {
         snake.dy = -config.sizeCell;
@@ -135,26 +139,26 @@ document.addEventListener("keydown", function (e) {
         snake.dx = -config.sizeCell;
         snake.dy = 0;
        }else if ( e.code == "KeyS"  ){
-        snake.dx = -config.sizeCell;
-        snake.dy = 0;
+        snake.dy = config.sizeCell;
+        snake.dx = 0;
        }else if ( e.code == "KeyD"  ){
-        snake.dx = -config.sizeCell;
+        snake.dx = config.sizeCell;
         snake.dy = 0;
     }
 })
  
 
 // document.addEventListener("keydown", function strelki (e) {
-//     if  ( e.code == ""  ) {
+//     if  ( e.code == "ArrowUp"  ) {
 //         snake.dy = -config.sizeCell;
 //         snake.dx = 0;
-//        }else if ( e.code == ""  ){
+//        }else if ( e.code == "ArrowLeft"  ){
 //         snake.dx = -config.sizeCell;
 //         snake.dy = 0;
-//        }else if ( e.code == ""  ){
+//        }else if ( e.code == "ArrowDown"  ){
 //         snake.dx = -config.sizeCell;
 //         snake.dy = 0;
-//        }else if ( e.code == ""  ){
+//        }else if ( e.code == "ArrowRight"  ){
 //         snake.dx = -config.sizeCell;
 //         snake.dy = 0;
 //     }
@@ -177,5 +181,48 @@ document.addEventListener("keydown", function (e) {
 //         snake.dy = 0;
 //     }
 // })
+
+
+
+
+function collisionBorder(){
+    if (snake.x < 0) {
+    snake.x=canvas.width-config.sizeCell;
+    }else if(snake.x >= canvas.width) {
+        snake.x =0;
+    }
+    
+    if(snake.y < 0) {
+        snake.y=canvas.height-config.sizeCell;
+    } else if (snake.y >= canvas.height) {
+        snake.y = 0;
+    }
+
+
+}
+
+
+function refreshGame() {
+    score = 0
+   drawScore();
+   snake.x = 160;
+   snake.y = 160;
+   snake.tails = [];
+   snake.maxTails = 3;
+   snake.dx = config.sizeCell;
+   snake.dy = 0;
+
+   randomPositionBerry()
+}
+
+
+
+
+
+
+
+
+
+
 
 
